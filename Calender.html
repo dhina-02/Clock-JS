@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS CLOCK</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap");
+
+      @font-face {
+        font-family: "DS-DIGI";
+        src: url("DS-DIGI.TTF");
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #000000;
+        user-select: none;
+        cursor: pointer;
+        font-family: "Poppins", sans-serif;
+        color: white;
+      }
+
+      .days,
+      .month {
+        width: 600px;
+        height: 50px;
+        color: rgba(113, 128, 147, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .days span,
+      .month span {
+        font-size: 12px;
+        width: 80px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+      }
+
+      .day-active {
+        color: rgba(255, 195, 18, 1) !important;
+      }
+
+      .clock {
+        width: 600px;
+        height: 100px;
+        font-size: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "DS-DIGI";
+        color: #41ea0e;
+        text-shadow: 0px 0px 5px;
+      }
+
+      .num {
+        width: 50px;
+        height: 100px;
+        position: relative;
+        text-align: right;
+      }
+
+      .num::before {
+        content: "0";
+        position: absolute;
+        top: 0;
+        right: 0px;
+        color: rgba(113, 128, 147, 0.1);
+      }
+      .colon {
+        width: 50px;
+        height: 100px;
+        text-align: center;
+        animation: blink 0.7s ease infinite;
+      }
+
+      @keyframes blink {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .meridian span {
+        display: block;
+        font-size: 25px;
+        width: 30px;
+        text-align: center;
+        color: rgba(67, 71, 76, 0.037);
+      }
+
+      .meridian span:nth-child(2) {
+        margin-top: 10px;
+      }
+      .active {
+        color: #32e816 !important;
+      }
+
+      .date {
+        color: rgba(234, 32, 39, 1);
+        text-shadow: 0px 0px 2px;
+        font-family: "DS-DIGI";
+        font-size: 40px;
+        font-weight: bold;
+      }
+      .bod-bod {
+        border: 12px solid #756f30;
+      }
+      .bod {
+        text-align: center;
+        border: 8px solid #c7be58;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="bod-bod">
+      <section class="bod">
+        <div class="days">
+          <span>Sunday</span>
+          <span>Monday</span>
+          <span>Tuesday</span>
+          <span>Wednesday</span>
+          <span>Thursday</span>
+          <span>Friday</span>
+          <span>Saturday</span>
+        </div>
+
+        <div class="clock">
+          <div class="h num">1</div>
+          <div class="h num">2</div>
+          <div class="colon">:</div>
+          <div class="m num">1</div>
+          <div class="m num">0</div>
+          <div class="colon">:</div>
+          <div class="s num">1</div>
+          <div class="s num">0</div>
+          <div class="meridian">
+            <span>AM</span>
+            <span>PM</span>
+          </div>
+        </div>
+
+        <div class="date">12-10-2022</div>
+
+        <div class="month">
+          <span>JAN</span>
+          <span>FEB</span>
+          <span>MAR</span>
+          <span>APR</span>
+          <span>MAY</span>
+          <span>JUN</span>
+          <span>JUL</span>
+          <span>AUG</span>
+          <span>SEP</span>
+          <span>OCT</span>
+          <span>NOV</span>
+          <span>DEC</span>
+        </div>
+      </section>
+    </section>
+    <script>
+      const h = document.querySelectorAll(".h");
+      const m = document.querySelectorAll(".m");
+      const s = document.querySelectorAll(".s");
+      const span = document.querySelectorAll(".meridian span");
+      const days_span = document.querySelectorAll(".days span");
+      const month_span = document.querySelectorAll(".month span");
+      const date = document.querySelector(".date");
+
+      function runClock() {
+        var time = new Date();
+        //Date
+        var da = time.getDate();
+        da = da < 10 ? "0" + da : da;
+        var mo = time.getMonth() + 1;
+        mo = mo < 10 ? "0" + mo : mo;
+        var ye = time.getFullYear();
+        date.innerHTML = `${da}-${mo}-${ye}`;
+        //Day
+        days_span[time.getDay()].classList.add("day-active");
+        //Month
+        month_span[time.getMonth()].classList.add("day-active");
+        //Time
+        var hrs = time.getHours();
+        var min = time.getMinutes();
+        var sec = time.getSeconds();
+
+        if (hrs > 12) {
+          hrs = hrs - 12;
+          span[1].classList.add("active");
+        } else {
+          if (hrs == 0) {
+            hrs = 12;
+          }
+          span[0].classList.add("active");
+        }
+
+        hrs = hrs < 10 ? "0" + hrs : hrs;
+        min = min < 10 ? "0" + min : min;
+        sec = sec < 10 ? "0" + sec : sec;
+
+        hrs = hrs.toString(); //04
+        min = min.toString();
+        sec = sec.toString();
+
+        h[0].innerHTML = hrs[0]; //0
+        h[1].innerHTML = hrs[1]; //4
+
+        m[0].innerHTML = min[0];
+        m[1].innerHTML = min[1];
+
+        s[0].innerHTML = sec[0];
+        s[1].innerHTML = sec[1];
+      }
+
+      setInterval(runClock, 1000);
+    </script>
+  </body>
+</html>
